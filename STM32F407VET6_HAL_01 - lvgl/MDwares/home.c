@@ -27,6 +27,20 @@ static void homebtn_event_cb(lv_event_t *e)
 		printf("calendar init\n");
     }
 }
+static void tv_home_event_cb(lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *tg = lv_event_get_target(e);
+	printf("tv_home_event\n");
+	if(code == LV_EVENT_CLICKED)
+	{
+		printf("clicked\n");
+	}
+    if(code == LV_EVENT_GESTURE)
+    {
+		printf("slide\n");
+    }
+}
 void ui_init()
 {
     lv_disp_t * dispp = lv_disp_get_default();
@@ -38,10 +52,11 @@ void ui_init()
 }
 void home()
 {
-    tv_home = lv_tileview_create(lv_scr_act());
+    tv_home = lv_tileview_create(NULL);
+	lv_obj_add_flag(tv_home, LV_OBJ_FLAG_GESTURE_BUBBLE);
     lv_obj_t *tv1 = lv_tileview_add_tile(tv_home,0,0,LV_DIR_RIGHT);
     lv_obj_t *tv2 = lv_tileview_add_tile(tv_home,1,0,LV_DIR_LEFT);
-
+	
     imgbtn_game2048 = lv_imgbtn_create(tv1);
     lv_imgbtn_set_src(imgbtn_game2048,LV_IMGBTN_STATE_RELEASED,NULL,&game2048,NULL);
     lv_obj_set_size(imgbtn_game2048,64,64);
@@ -59,6 +74,7 @@ void home()
     lv_obj_add_style(imgbtn_game2048, &style_pressed, LV_STATE_PRESSED);
     lv_obj_add_style(imgbtn_calendar, &style_pressed, LV_STATE_PRESSED);
 
+    lv_obj_add_event_cb(tv_home,tv_home_event_cb,LV_EVENT_ALL,NULL);
     lv_obj_add_event_cb(imgbtn_game2048,homebtn_event_cb,LV_EVENT_ALL,NULL);
     lv_obj_add_event_cb(imgbtn_calendar,homebtn_event_cb,LV_EVENT_ALL,NULL);
 
